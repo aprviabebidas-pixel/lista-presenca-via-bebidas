@@ -134,6 +134,17 @@
   </div>
 
   <script>
+    
+const parametros = new URLSearchParams(window.location.search);
+const codigoTreinamento = parametros.get("codigo");
+
+if (!codigoTreinamento) {
+  document.getElementById("mensagem").textContent =
+    "Link de treinamento inválido. Solicite um novo link ao responsável.";
+
+  document.querySelector(".enviar").disabled = true;
+}
+
     const canvas = document.getElementById("assinatura");
     const ctx = canvas.getContext("2d");
 
