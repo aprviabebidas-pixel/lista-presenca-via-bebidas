@@ -1,8 +1,8 @@
-
 <!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
@@ -130,12 +130,14 @@
     .muted {
       color: #607187;
       font-size: 14px;
+      line-height: 1.5;
     }
 
     .status {
       min-height: 22px;
       margin: 12px 0;
       font-weight: 600;
+      line-height: 1.5;
     }
 
     .error {
@@ -165,6 +167,7 @@
       padding: 10px;
       border-bottom: 1px solid #e2e8f0;
       text-align: left;
+      vertical-align: middle;
     }
 
     th {
@@ -172,7 +175,16 @@
     }
 
     td.actions {
-      white-space: nowrap;
+      min-width: 260px;
+    }
+
+    .actions .row {
+      gap: 6px;
+    }
+
+    .actions button {
+      padding: 8px 10px;
+      font-size: 12px;
     }
 
     code {
@@ -184,6 +196,7 @@
     }
 
     .pill {
+      display: inline-block;
       background: #edf3fb;
       border-radius: 20px;
       padding: 5px 9px;
@@ -194,6 +207,36 @@
       max-width: 110px;
       max-height: 54px;
       object-fit: contain;
+    }
+
+    .edit-card {
+      border: 2px solid #b9d8f1;
+      background: #fbfdff;
+    }
+
+    .edit-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .edit-heading h2 {
+      margin-bottom: 0;
+    }
+
+    .edit-note {
+      padding: 10px 12px;
+      background: #edf5fc;
+      border-radius: 8px;
+      color: #36536b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .section-actions {
+      margin-top: 18px;
     }
 
     @media (max-width: 650px) {
@@ -218,7 +261,11 @@
       }
 
       td.actions {
-        white-space: normal;
+        min-width: 210px;
+      }
+
+      .actions button {
+        padding: 8px;
       }
     }
   </style>
@@ -228,6 +275,7 @@
   <header>
     <div>
       <h1>Via Bebidas | Administração</h1>
+
       <div class="small">
         Listas de presença de treinamentos
       </div>
@@ -245,11 +293,13 @@
   <main class="wrap">
 
     <!-- LOGIN -->
+
     <section id="loginArea" class="card login">
       <h2>Acesso do Administrador</h2>
 
       <form id="loginForm">
         <label for="usuario">Usuário</label>
+
         <input
           id="usuario"
           value="Administrador"
@@ -258,6 +308,7 @@
         >
 
         <label for="senha">Senha</label>
+
         <input
           id="senha"
           type="password"
@@ -282,9 +333,11 @@
     </section>
 
     <!-- PAINEL ADMINISTRATIVO -->
+
     <div id="painel" class="hidden">
 
       <!-- CADASTRAR TREINAMENTO -->
+
       <section class="card">
         <div
           class="row"
@@ -357,13 +410,8 @@
             </label>
 
             <select id="tipo">
-              <option value="Interno">
-                Interno
-              </option>
-
-              <option value="Externo">
-                Externo
-              </option>
+              <option value="Interno">Interno</option>
+              <option value="Externo">Externo</option>
             </select>
           </div>
 
@@ -391,7 +439,7 @@
             >
           </div>
 
-          <div class="wide">
+          <div class="wide section-actions">
             <button
               id="criar"
               type="submit"
@@ -408,7 +456,133 @@
         ></p>
       </section>
 
+      <!-- EDITAR TREINAMENTO -->
+
+      <section
+        id="editarTreinamentoArea"
+        class="card edit-card hidden"
+      >
+        <div class="edit-heading">
+          <h2>Editar treinamento</h2>
+
+          <button
+            id="cancelarEdicaoTreino"
+            type="button"
+            class="secondary"
+          >
+            Cancelar edição
+          </button>
+        </div>
+
+        <p class="edit-note">
+          As alterações não modificarão o link do
+          treinamento nem as presenças já registradas.
+        </p>
+
+        <form
+          id="editarTreinamentoForm"
+          class="fields"
+        >
+          <div class="wide">
+            <label for="editNomeTreino">
+              Nome do treinamento
+            </label>
+
+            <input
+              id="editNomeTreino"
+              maxlength="180"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editDataTreino">
+              Data do treinamento
+            </label>
+
+            <input
+              id="editDataTreino"
+              type="date"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editCarga">
+              Carga horária
+            </label>
+
+            <input
+              id="editCarga"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editInstrutor">
+              Instrutor
+            </label>
+
+            <input
+              id="editInstrutor"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editTipo">
+              Tipo de treinamento
+            </label>
+
+            <select id="editTipo">
+              <option value="Interno">Interno</option>
+              <option value="Externo">Externo</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="editInicio">
+              Início das inscrições
+            </label>
+
+            <input
+              id="editInicio"
+              type="datetime-local"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editFim">
+              Encerramento das inscrições
+            </label>
+
+            <input
+              id="editFim"
+              type="datetime-local"
+              required
+            >
+          </div>
+
+          <div class="wide section-actions">
+            <button
+              id="salvarTreino"
+              type="submit"
+            >
+              Salvar alterações
+            </button>
+          </div>
+        </form>
+
+        <p
+          id="editarTreinoMsg"
+          class="status"
+          role="status"
+        ></p>
+      </section>
+
       <!-- TREINAMENTOS CADASTRADOS -->
+
       <section class="card">
         <div
           class="row"
@@ -426,10 +600,10 @@
         </div>
 
         <p class="muted">
-          Selecione um treinamento para consultar
-          participantes ou gerar o PDF.
-          Compartilhe apenas o link de presença
-          com os funcionários.
+          Consulte participantes, gere o PDF, edite
+          informações ou exclua treinamentos sem
+          presenças registradas. Compartilhe apenas
+          o link de presença com os funcionários.
         </p>
 
         <div class="table-wrap">
@@ -456,6 +630,7 @@
       </section>
 
       <!-- PRESENÇAS -->
+
       <section
         class="card hidden"
         id="presencasArea"
@@ -496,12 +671,104 @@
                 <th>Função</th>
                 <th>Setor</th>
                 <th>Registrado em</th>
+                <th>Ações</th>
               </tr>
             </thead>
 
             <tbody id="presencasBody"></tbody>
           </table>
         </div>
+      </section>
+
+      <!-- EDITAR PARTICIPANTE -->
+
+      <section
+        id="editarParticipanteArea"
+        class="card edit-card hidden"
+      >
+        <div class="edit-heading">
+          <h2>Editar participante</h2>
+
+          <button
+            id="cancelarEdicaoParticipante"
+            type="button"
+            class="secondary"
+          >
+            Cancelar edição
+          </button>
+        </div>
+
+        <p class="edit-note">
+          A assinatura digital e a data original
+          do registro serão preservadas.
+        </p>
+
+        <form
+          id="editarParticipanteForm"
+          class="fields"
+        >
+          <div class="wide">
+            <label for="editNomeParticipante">
+              Nome completo
+            </label>
+
+            <input
+              id="editNomeParticipante"
+              maxlength="150"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editMatricula">
+              Matrícula
+            </label>
+
+            <input
+              id="editMatricula"
+              maxlength="30"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="editFuncao">
+              Função
+            </label>
+
+            <input
+              id="editFuncao"
+              maxlength="100"
+            >
+          </div>
+
+          <div>
+            <label for="editSetor">
+              Setor
+            </label>
+
+            <input
+              id="editSetor"
+              maxlength="100"
+              required
+            >
+          </div>
+
+          <div class="wide section-actions">
+            <button
+              id="salvarParticipante"
+              type="submit"
+            >
+              Salvar alterações
+            </button>
+          </div>
+        </form>
+
+        <p
+          id="editarParticipanteMsg"
+          class="status"
+          role="status"
+        ></p>
       </section>
 
     </div>
@@ -514,6 +781,7 @@
     'use strict';
 
     // CONFIGURAÇÕES
+
     const SUPABASE_URL =
       'https://brpjkexhqyrdbwcpauzx.supabase.co';
 
@@ -533,10 +801,16 @@
     let treinoAtual = null;
     let presencas = [];
 
+    let treinoEmEdicao = null;
+    let participanteEmEdicao = null;
+
+    // FUNÇÕES GERAIS
+
     function aviso(id, msg, erro = false) {
       const el = $(id);
 
       el.textContent = msg;
+
       el.className =
         'status ' + (erro ? 'error' : 'success');
     }
@@ -553,6 +827,47 @@
       return s
         ? new Date(s).toLocaleString('pt-BR')
         : '-';
+    }
+
+    function dataHoraLocal(s) {
+      if (!s) return '';
+
+      const d = new Date(s);
+
+      if (!Number.isFinite(d.getTime())) {
+        return '';
+      }
+
+      const pad = n => String(n).padStart(2, '0');
+
+      return (
+        d.getFullYear() + '-' +
+        pad(d.getMonth() + 1) + '-' +
+        pad(d.getDate()) + 'T' +
+        pad(d.getHours()) + ':' +
+        pad(d.getMinutes())
+      );
+    }
+
+    function validarPeriodo(inicioValor, fimValor) {
+      const inicio = new Date(inicioValor);
+      const fim = new Date(fimValor);
+
+      if (
+        !Number.isFinite(inicio.getTime()) ||
+        !Number.isFinite(fim.getTime()) ||
+        fim <= inicio
+      ) {
+        throw Error(
+          'Informe um período de inscrições válido. ' +
+          'O encerramento deve ser posterior ao início.'
+        );
+      }
+
+      return {
+        inicio_em: inicio.toISOString(),
+        encerramento_em: fim.toISOString()
+      };
     }
 
     function linha(celulas, acoes) {
@@ -572,6 +887,7 @@
 
         td.className = 'actions';
         td.appendChild(acoes);
+
         tr.appendChild(td);
       }
 
@@ -596,7 +912,15 @@
       $('sair').classList.toggle('hidden', !ok);
     }
 
+    function rolarPara(id) {
+      $(id).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
     // AUTORIZAÇÃO
+
     async function autorizar() {
       const {
         data: { user },
@@ -650,6 +974,7 @@
     }
 
     // LOGIN
+
     $('loginForm').addEventListener(
       'submit',
       async e => {
@@ -711,6 +1036,7 @@
     );
 
     // SAIR
+
     $('sair').addEventListener(
       'click',
       async () => {
@@ -718,12 +1044,19 @@
 
         treinoAtual = null;
         presencas = [];
+        treinoEmEdicao = null;
+        participanteEmEdicao = null;
+
+        $('presencasArea').classList.add('hidden');
+        $('editarTreinamentoArea').classList.add('hidden');
+        $('editarParticipanteArea').classList.add('hidden');
 
         mostrarPainel(false);
       }
     );
 
     // LISTAR TREINAMENTOS
+
     async function listarTreinamentos() {
       aviso('treinosMsg', 'Carregando...');
 
@@ -766,14 +1099,27 @@
             'Copiar link',
             () => copiarLink(t)
           ),
+
           botao(
             'Presenças',
             () => abrirPresencas(t)
           ),
+
+          botao(
+            'Editar',
+            () => abrirEdicaoTreinamento(t)
+          ),
+
           botao(
             t.ativo ? 'Encerrar' : 'Reativar',
             () => alterarAtivo(t),
             t.ativo ? 'danger' : 'secondary'
+          ),
+
+          botao(
+            'Excluir',
+            () => excluirTreinamento(t),
+            'danger'
           )
         );
 
@@ -790,6 +1136,21 @@
         );
       }
 
+      if (treinoAtual) {
+        const atualizado = treinamentos.find(
+          t => t.id === treinoAtual.id
+        );
+
+        if (atualizado) {
+          treinoAtual = atualizado;
+
+          $('tituloPresencas').textContent =
+            'Presenças — ' + atualizado.nome;
+        } else {
+          fecharAreaPresencas();
+        }
+      }
+
       aviso(
         'treinosMsg',
         `${treinamentos.length} treinamento(s) encontrado(s).`
@@ -797,6 +1158,7 @@
     }
 
     // LINK DO TREINAMENTO
+
     function linkTreino(t) {
       return (
         SITE_PRESENCA +
@@ -825,6 +1187,7 @@
     }
 
     // ENCERRAR OU REATIVAR
+
     async function alterarAtivo(t) {
       const acao = t.ativo
         ? 'Encerrar'
@@ -838,17 +1201,19 @@
         return;
       }
 
-      const { error } = await sb
+      const { data, error } = await sb
         .from('treinamentos')
         .update({
           ativo: !t.ativo
         })
-        .eq('id', t.id);
+        .eq('id', t.id)
+        .select('id');
 
-      if (error) {
+      if (error || !data?.length) {
         aviso(
           'treinosMsg',
-          'Erro ao alterar treinamento: ' + error.message,
+          'Erro ao alterar treinamento: ' +
+          (error?.message || 'Operação não autorizada.'),
           true
         );
 
@@ -864,6 +1229,7 @@
     );
 
     // CRIAR TREINAMENTO
+
     $('treinamentoForm').addEventListener(
       'submit',
       async e => {
@@ -878,26 +1244,11 @@
         );
 
         try {
-          const inicio = new Date(
-            $('inicio').value
-          );
-
-          const fim = new Date(
+          const periodo = validarPeriodo(
+            $('inicio').value,
             $('fim').value
           );
 
-          if (
-            !Number.isFinite(inicio.getTime()) ||
-            !Number.isFinite(fim.getTime()) ||
-            fim <= inicio
-          ) {
-            throw Error(
-              'Informe um período de inscrições válido.'
-            );
-          }
-
-          // Valores compatíveis com a restrição
-          // treinamentos_tipo_check do Supabase.
           const tipoSelecionado = $('tipo').value;
 
           if (
@@ -917,18 +1268,14 @@
             tipo: tipoSelecionado,
             ativo: true,
             codigo_acesso: crypto.randomUUID(),
-            inicio_em: inicio.toISOString(),
-            encerramento_em: fim.toISOString()
+            ...periodo
           };
 
           const {
-            data,
             error
           } = await sb
             .from('treinamentos')
-            .insert(dados)
-            .select('id,nome,codigo_acesso')
-            .single();
+            .insert(dados);
 
           if (error) {
             throw Error(error.message);
@@ -956,9 +1303,238 @@
       }
     );
 
+    // EDITAR TREINAMENTO
+
+    function abrirEdicaoTreinamento(t) {
+      treinoEmEdicao = t;
+
+      $('editNomeTreino').value =
+        t.nome || '';
+
+      $('editDataTreino').value =
+        t.data_treinamento || '';
+
+      $('editCarga').value =
+        t.carga_horaria || '';
+
+      $('editInstrutor').value =
+        t.instrutor || '';
+
+      $('editTipo').value =
+        t.tipo || 'Interno';
+
+      $('editInicio').value =
+        dataHoraLocal(t.inicio_em);
+
+      $('editFim').value =
+        dataHoraLocal(t.encerramento_em);
+
+      aviso('editarTreinoMsg', '');
+
+      $('editarTreinamentoArea').classList.remove(
+        'hidden'
+      );
+
+      rolarPara('editarTreinamentoArea');
+    }
+
+    function cancelarEdicaoTreinamento() {
+      treinoEmEdicao = null;
+
+      $('editarTreinamentoForm').reset();
+
+      $('editarTreinamentoArea').classList.add(
+        'hidden'
+      );
+
+      aviso('editarTreinoMsg', '');
+    }
+
+    $('cancelarEdicaoTreino').addEventListener(
+      'click',
+      cancelarEdicaoTreinamento
+    );
+
+    $('editarTreinamentoForm').addEventListener(
+      'submit',
+      async e => {
+        e.preventDefault();
+
+        if (!treinoEmEdicao) {
+          return;
+        }
+
+        const b = $('salvarTreino');
+        b.disabled = true;
+
+        aviso(
+          'editarTreinoMsg',
+          'Salvando alterações...'
+        );
+
+        try {
+          const periodo = validarPeriodo(
+            $('editInicio').value,
+            $('editFim').value
+          );
+
+          const tipo = $('editTipo').value;
+
+          if (
+            tipo !== 'Interno' &&
+            tipo !== 'Externo'
+          ) {
+            throw Error(
+              'Tipo de treinamento inválido.'
+            );
+          }
+
+          const dados = {
+            nome: $('editNomeTreino').value.trim(),
+            data_treinamento: $('editDataTreino').value,
+            carga_horaria: $('editCarga').value.trim(),
+            instrutor: $('editInstrutor').value.trim(),
+            tipo,
+            ...periodo
+          };
+
+          const { data, error } = await sb
+            .from('treinamentos')
+            .update(dados)
+            .eq('id', treinoEmEdicao.id)
+            .select('id');
+
+          if (error) {
+            throw Error(error.message);
+          }
+
+          if (!data?.length) {
+            throw Error(
+              'Treinamento não atualizado. Verifique as permissões.'
+            );
+          }
+
+          cancelarEdicaoTreinamento();
+
+          await listarTreinamentos();
+
+          aviso(
+            'treinosMsg',
+            'Treinamento atualizado com sucesso.'
+          );
+
+        } catch (err) {
+          aviso(
+            'editarTreinoMsg',
+            'Erro ao salvar: ' + err.message,
+            true
+          );
+
+        } finally {
+          b.disabled = false;
+        }
+      }
+    );
+
+    // EXCLUIR TREINAMENTO
+
+    async function excluirTreinamento(t) {
+      const confirmacao = confirm(
+        `Deseja realmente excluir o treinamento "${t.nome}"?\n\n` +
+        'Esta ação não poderá ser desfeita.\n\n' +
+        'Treinamentos com presenças registradas não podem ser excluídos.'
+      );
+
+      if (!confirmacao) {
+        return;
+      }
+
+      aviso(
+        'treinosMsg',
+        'Verificando participantes do treinamento...'
+      );
+
+      try {
+        const { count, error: erroContagem } = await sb
+          .from('presencas')
+          .select('id', {
+            count: 'exact',
+            head: true
+          })
+          .eq('treinamento_id', t.id);
+
+        if (erroContagem) {
+          throw Error(erroContagem.message);
+        }
+
+        if (count > 0) {
+          throw Error(
+            `Este treinamento possui ${count} presença(s). ` +
+            'Para excluí-lo, primeiro remova os participantes. ' +
+            'Recomendamos preservar treinamentos que já possuem assinaturas.'
+          );
+        }
+
+        const { data, error } = await sb
+          .from('treinamentos')
+          .delete()
+          .eq('id', t.id)
+          .select('id');
+
+        if (error) {
+          throw Error(error.message);
+        }
+
+        if (!data?.length) {
+          throw Error(
+            'Treinamento não excluído. Verifique as permissões.'
+          );
+        }
+
+        if (
+          treinoEmEdicao &&
+          treinoEmEdicao.id === t.id
+        ) {
+          cancelarEdicaoTreinamento();
+        }
+
+        if (
+          treinoAtual &&
+          treinoAtual.id === t.id
+        ) {
+          fecharAreaPresencas();
+        }
+
+        await listarTreinamentos();
+
+        aviso(
+          'treinosMsg',
+          'Treinamento excluído com sucesso.'
+        );
+
+      } catch (err) {
+        aviso(
+          'treinosMsg',
+          'Não foi possível excluir: ' + err.message,
+          true
+        );
+      }
+    }
+
     // ABRIR PRESENÇAS
+
     async function abrirPresencas(t) {
+      if (
+        treinoAtual &&
+        treinoAtual.id !== t.id
+      ) {
+        cancelarEdicaoParticipante();
+      }
+
       treinoAtual = t;
+      presencas = [];
+
+      $('presencasBody').replaceChildren();
 
       $('presencasArea').classList.remove(
         'hidden'
@@ -967,16 +1543,32 @@
       $('tituloPresencas').textContent =
         'Presenças — ' + t.nome;
 
-      $('presencasArea').scrollIntoView({
-        behavior: 'smooth'
-      });
+      rolarPara('presencasArea');
 
       await carregarPresencas();
     }
 
+    function fecharAreaPresencas() {
+      treinoAtual = null;
+      presencas = [];
+
+      cancelarEdicaoParticipante();
+
+      $('presencasArea').classList.add(
+        'hidden'
+      );
+
+      $('presencasBody').replaceChildren();
+    }
+
     // CARREGAR PARTICIPANTES
+
     async function carregarPresencas() {
-      if (!treinoAtual) return;
+      if (!treinoAtual) {
+        return;
+      }
+
+      const idTreinamento = treinoAtual.id;
 
       aviso(
         'presencasMsg',
@@ -1000,10 +1592,14 @@
           )
           .eq(
             'treinamento_id',
-            treinoAtual.id
+            idTreinamento
           )
           .order(
             'registrado_em',
+            { ascending: true }
+          )
+          .order(
+            'id',
             { ascending: true }
           )
           .range(
@@ -1022,7 +1618,7 @@
           return;
         }
 
-        todos.push(...data);
+        todos.push(...(data || []));
 
         if (data.length < tamanho) {
           break;
@@ -1031,20 +1627,46 @@
         inicio += tamanho;
       }
 
+      if (
+        !treinoAtual ||
+        treinoAtual.id !== idTreinamento
+      ) {
+        return;
+      }
+
       presencas = todos;
 
       const body = $('presencasBody');
       body.replaceChildren();
 
       for (const p of presencas) {
+        const a = document.createElement('div');
+        a.className = 'row';
+
+        a.append(
+          botao(
+            'Editar',
+            () => abrirEdicaoParticipante(p)
+          ),
+
+          botao(
+            'Excluir',
+            () => excluirParticipante(p),
+            'danger'
+          )
+        );
+
         body.appendChild(
-          linha([
-            p.matricula,
-            p.nome,
-            p.funcao,
-            p.setor,
-            dataHoraBR(p.registrado_em)
-          ])
+          linha(
+            [
+              p.matricula,
+              p.nome,
+              p.funcao,
+              p.setor,
+              dataHoraBR(p.registrado_em)
+            ],
+            a
+          )
         );
       }
 
@@ -1059,7 +1681,211 @@
       carregarPresencas
     );
 
+    // EDITAR PARTICIPANTE
+
+    function abrirEdicaoParticipante(p) {
+      participanteEmEdicao = p;
+
+      $('editNomeParticipante').value =
+        p.nome || '';
+
+      $('editMatricula').value =
+        p.matricula || '';
+
+      $('editFuncao').value =
+        p.funcao || '';
+
+      $('editSetor').value =
+        p.setor || '';
+
+      aviso('editarParticipanteMsg', '');
+
+      $('editarParticipanteArea').classList.remove(
+        'hidden'
+      );
+
+      rolarPara('editarParticipanteArea');
+    }
+
+    function cancelarEdicaoParticipante() {
+      participanteEmEdicao = null;
+
+      $('editarParticipanteForm').reset();
+
+      $('editarParticipanteArea').classList.add(
+        'hidden'
+      );
+
+      aviso('editarParticipanteMsg', '');
+    }
+
+    $('cancelarEdicaoParticipante').addEventListener(
+      'click',
+      cancelarEdicaoParticipante
+    );
+
+    $('editarParticipanteForm').addEventListener(
+      'submit',
+      async e => {
+        e.preventDefault();
+
+        if (
+          !participanteEmEdicao ||
+          !treinoAtual
+        ) {
+          return;
+        }
+
+        const b = $('salvarParticipante');
+        b.disabled = true;
+
+        aviso(
+          'editarParticipanteMsg',
+          'Salvando alterações...'
+        );
+
+        try {
+          const dados = {
+            nome: $('editNomeParticipante').value.trim(),
+            matricula: $('editMatricula').value.trim(),
+            funcao: $('editFuncao').value.trim(),
+            setor: $('editSetor').value.trim()
+          };
+
+          if (
+            !dados.nome ||
+            !dados.matricula ||
+            !dados.setor
+          ) {
+            throw Error(
+              'Preencha nome, matrícula e setor.'
+            );
+          }
+
+          const duplicado = presencas.some(
+            p =>
+              p.id !== participanteEmEdicao.id &&
+              p.matricula === dados.matricula
+          );
+
+          if (duplicado) {
+            throw Error(
+              'Esta matrícula já está registrada neste treinamento.'
+            );
+          }
+
+          const { data, error } = await sb
+            .from('presencas')
+            .update(dados)
+            .eq('id', participanteEmEdicao.id)
+            .eq('treinamento_id', treinoAtual.id)
+            .select('id');
+
+          if (error) {
+            if (error.code === '23505') {
+              throw Error(
+                'Esta matrícula já está registrada neste treinamento.'
+              );
+            }
+
+            throw Error(error.message);
+          }
+
+          if (!data?.length) {
+            throw Error(
+              'Participante não atualizado. Verifique as permissões.'
+            );
+          }
+
+          cancelarEdicaoParticipante();
+
+          await carregarPresencas();
+
+          aviso(
+            'presencasMsg',
+            'Dados do participante atualizados com sucesso.'
+          );
+
+        } catch (err) {
+          aviso(
+            'editarParticipanteMsg',
+            'Erro ao salvar: ' + err.message,
+            true
+          );
+
+        } finally {
+          b.disabled = false;
+        }
+      }
+    );
+
+    // EXCLUIR PARTICIPANTE
+
+    async function excluirParticipante(p) {
+      if (!treinoAtual) {
+        return;
+      }
+
+      const confirmado = confirm(
+        `Deseja excluir o participante "${p.nome}"?\n\n` +
+        `Matrícula: ${p.matricula}\n\n` +
+        'O registro será removido da lista de presença ' +
+        'e não aparecerá mais no PDF.\n\n' +
+        'Esta ação não poderá ser desfeita.'
+      );
+
+      if (!confirmado) {
+        return;
+      }
+
+      aviso(
+        'presencasMsg',
+        'Excluindo participante...'
+      );
+
+      try {
+        const { data, error } = await sb
+          .from('presencas')
+          .delete()
+          .eq('id', p.id)
+          .eq('treinamento_id', treinoAtual.id)
+          .select('id');
+
+        if (error) {
+          throw Error(error.message);
+        }
+
+        if (!data?.length) {
+          throw Error(
+            'Participante não excluído. Verifique as permissões.'
+          );
+        }
+
+        if (
+          participanteEmEdicao &&
+          participanteEmEdicao.id === p.id
+        ) {
+          cancelarEdicaoParticipante();
+        }
+
+        await carregarPresencas();
+
+        aviso(
+          'presencasMsg',
+          'Participante excluído com sucesso.'
+        );
+
+      } catch (err) {
+        aviso(
+          'presencasMsg',
+          'Erro ao excluir participante: ' + err.message,
+          true
+        );
+      }
+    }
+
     // CONVERTER IMAGEM PARA BASE64
+
     function imagemParaDataURL(blob) {
       return new Promise(
         (resolve, reject) => {
@@ -1081,6 +1907,7 @@
     }
 
     // CARREGAR LOGOTIPO SDPO
+
     async function carregarLogo() {
       const resp = await fetch(
         'logo_sdpo.png'
@@ -1098,6 +1925,7 @@
     }
 
     // CARREGAR ASSINATURA DO SUPABASE
+
     async function assinaturaImagem(p) {
       if (!p.assinatura_path) {
         return null;
@@ -1120,6 +1948,7 @@
     }
 
     // AJUSTAR TEXTO NAS CÉLULAS DO PDF
+
     function textoAjustado(
       doc,
       txt,
@@ -1167,6 +1996,7 @@
     }
 
     // CABEÇALHO DO PDF
+
     function desenharCabecalho(
       doc,
       t,
@@ -1397,6 +2227,7 @@
     }
 
     // GERAR PDF
+
     async function gerarPDF() {
       if (!treinoAtual) {
         return;
@@ -1410,6 +2241,14 @@
           'presencasMsg',
           'Preparando PDF e carregando assinaturas...'
         );
+
+        /*
+          Recarrega as presenças para garantir que
+          correções e exclusões recentes sejam
+          refletidas no documento.
+        */
+
+        await carregarPresencas();
 
         if (!presencas.length) {
           throw Error(
@@ -1430,7 +2269,10 @@
             await assinaturaImagem(presencas[i])
           );
 
-          if (i % 10 === 0) {
+          if (
+            i % 10 === 0 ||
+            i === presencas.length - 1
+          ) {
             aviso(
               'presencasMsg',
               `Carregando assinaturas: ${i + 1}/${presencas.length}`
