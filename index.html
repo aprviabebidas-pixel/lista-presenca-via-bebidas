@@ -231,7 +231,16 @@ try {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({})
+      
+body: JSON.stringify({
+  codigo_acesso: codigoTreinamento,
+  nome: document.getElementById("nome").value.trim(),
+  matricula: document.getElementById("matricula").value.trim(),
+  funcao: document.getElementById("funcao").value.trim(),
+  setor: document.getElementById("setor").value.trim(),
+  assinatura: canvas.toDataURL("image/png")
+})
+
     }
   );
 
