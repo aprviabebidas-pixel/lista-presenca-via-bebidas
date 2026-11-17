@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -148,7 +148,7 @@
       color: #16723b;
     }
 
-    /* Tela ampliada de assinatura */
+    /* Modal de assinatura */
 
     .modal-assinatura {
       display: none;
@@ -159,11 +159,28 @@
       height: 100dvh;
       overflow: hidden;
       background: #fff;
-      flex-direction: column;
     }
 
     .modal-assinatura.aberto {
+      display: block;
+    }
+
+    /*
+      A área interna é sempre desenhada na horizontal.
+
+      Em celulares na vertical, giramos a interface
+      inteira em 90 graus, sem depender da configuração
+      de rotação automática do aparelho.
+    */
+
+    .assinatura-interface {
+      position: absolute;
+      inset: 0;
       display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      background: #fff;
     }
 
     .modal-topo {
@@ -187,7 +204,7 @@
     .area-desenho {
       flex: 1;
       min-height: 0;
-      padding: 10px;
+      padding: 8px;
       background: #f5f7fa;
       display: flex;
     }
@@ -222,7 +239,7 @@
 
     .guia-texto {
       position: absolute;
-      top: 14px;
+      top: 12px;
       left: 12px;
       right: 12px;
       color: #8492a4;
@@ -241,7 +258,7 @@
 
     .guia-direcao {
       position: absolute;
-      bottom: 12px;
+      bottom: 10px;
       left: 0;
       right: 0;
       color: #8492a4;
@@ -253,9 +270,9 @@
     .modal-botoes {
       display: flex;
       gap: 10px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       padding-bottom: max(
-        12px,
+        10px,
         env(safe-area-inset-bottom)
       );
       background: #fff;
@@ -265,7 +282,7 @@
 
     .modal-botoes button {
       flex: 1;
-      padding: 13px 8px;
+      padding: 12px 8px;
       font-size: 14px;
     }
 
@@ -288,33 +305,69 @@
       overflow: hidden;
     }
 
-    @media (max-width: 600px) {
-      .container {
-        margin: 12px;
-        padding: 18px;
+    /*
+      Rotação visual para celulares em pé.
+
+      A largura da interface passa a ser a altura
+      disponível da tela, e vice-versa.
+
+      O canvas permanece horizontal em suas próprias
+      coordenadas. Assim, a imagem exportada não gira.
+    */
+
+    @media (orientation: portrait) and (pointer: coarse) {
+      .assinatura-interface {
+        inset: auto;
+        top: 0;
+        left: 100%;
+        width: 100dvh;
+        height: 100vw;
+        transform-origin: top left;
+        transform: rotate(90deg);
       }
 
       .modal-topo {
-        padding: 8px 12px;
+        padding: 5px 12px;
       }
 
       .modal-topo h2 {
-        font-size: 17px;
+        font-size: 15px;
       }
 
-      .area-desenho {
-        padding: 6px;
+      .modal-topo p {
+        margin-top: 2px;
+        font-size: 11px;
       }
 
       .modal-botoes {
-        padding-left: 8px;
-        padding-right: 8px;
+        padding: 6px 10px;
+        padding-right: max(
+          10px,
+          env(safe-area-inset-bottom)
+        );
         gap: 6px;
       }
 
       .modal-botoes button {
-        font-size: 13px;
-        padding: 12px 5px;
+        padding: 9px 5px;
+        font-size: 12px;
+      }
+
+      .guia-texto {
+        top: 6px;
+        font-size: 11px;
+      }
+
+      .guia-direcao {
+        bottom: 5px;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 12px;
+        padding: 18px;
       }
     }
 
@@ -333,19 +386,16 @@
       }
 
       .modal-botoes {
-        padding-top: 6px;
-        padding-bottom: max(
-          6px,
-          env(safe-area-inset-bottom)
-        );
+        padding: 6px 10px;
       }
 
       .modal-botoes button {
         padding: 9px 5px;
+        font-size: 12px;
       }
 
       .guia-texto {
-        top: 7px;
+        top: 6px;
         font-size: 11px;
       }
 
@@ -380,6 +430,7 @@
     <form id="formulario">
 
       <label for="nome">Nome completo</label>
+
       <input
         id="nome"
         maxlength="150"
@@ -388,6 +439,7 @@
       >
 
       <label for="matricula">Matrícula</label>
+
       <input
         id="matricula"
         maxlength="30"
@@ -395,12 +447,14 @@
       >
 
       <label for="funcao">Função</label>
+
       <input
         id="funcao"
         maxlength="100"
       >
 
       <label for="setor">Setor</label>
+
       <input
         id="setor"
         maxlength="100"
@@ -446,7 +500,7 @@
     </form>
   </main>
 
-  <!-- Área de assinatura ampliada -->
+  <!-- Tela ampliada de assinatura -->
 
   <div
     class="modal-assinatura"
@@ -456,63 +510,67 @@
     aria-label="Assinar em tela cheia"
   >
 
-    <div class="modal-topo">
-      <h2>Faça sua assinatura</h2>
+    <div class="assinatura-interface">
 
-      <p>
-        Assine com o dedo seguindo o sentido da linha.
-      </p>
-    </div>
+      <div class="modal-topo">
+        <h2>Faça sua assinatura</h2>
 
-    <div class="area-desenho">
-      <div class="quadro-assinatura">
+        <p>
+          Assine com o dedo seguindo o sentido da linha.
+        </p>
+      </div>
 
-        <div
-          class="guia-assinatura"
-          aria-hidden="true"
-        >
-          <div class="guia-texto">
-            Assine seu nome sobre a linha
+      <div class="area-desenho">
+        <div class="quadro-assinatura">
+
+          <div
+            class="guia-assinatura"
+            aria-hidden="true"
+          >
+            <div class="guia-texto">
+              Assine seu nome sobre a linha
+            </div>
+
+            <div class="guia-linha"></div>
+
+            <div class="guia-direcao">
+              Início à esquerda → Final à direita
+            </div>
           </div>
 
-          <div class="guia-linha"></div>
+          <canvas id="canvasAssinatura"></canvas>
 
-          <div class="guia-direcao">
-            Início à esquerda → Final à direita
-          </div>
         </div>
+      </div>
 
-        <canvas id="canvasAssinatura"></canvas>
+      <div class="modal-botoes">
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          id="cancelarAssinatura"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn-limpar"
+          id="limparAssinatura"
+        >
+          Limpar
+        </button>
+
+        <button
+          type="button"
+          class="btn-confirmar"
+          id="confirmarAssinatura"
+        >
+          Confirmar
+        </button>
 
       </div>
     </div>
-
-    <div class="modal-botoes">
-      <button
-        type="button"
-        class="btn-cancelar"
-        id="cancelarAssinatura"
-      >
-        Cancelar
-      </button>
-
-      <button
-        type="button"
-        class="btn-limpar"
-        id="limparAssinatura"
-      >
-        Limpar
-      </button>
-
-      <button
-        type="button"
-        class="btn-confirmar"
-        id="confirmarAssinatura"
-      >
-        Confirmar
-      </button>
-    </div>
-
   </div>
 
   <script>
@@ -580,15 +638,10 @@
 
     function mostrarMensagem(texto, sucesso = false) {
       mensagem.textContent = texto;
+
       mensagem.className = sucesso
         ? "sucesso"
         : "erro";
-    }
-
-    function atualizarBotaoEnviar() {
-      if (!treinamentoCarregado) {
-        enviar.disabled = true;
-      }
     }
 
     async function carregarTreinamento() {
@@ -636,7 +689,6 @@
         }
 
         nomeTreinamento.textContent = nome;
-
         treinamentoCarregado = true;
         enviar.disabled = false;
 
@@ -649,7 +701,7 @@
           "Erro ao carregar o treinamento."
         );
 
-        atualizarBotaoEnviar();
+        enviar.disabled = true;
       }
     }
 
@@ -660,28 +712,48 @@
       contexto.lineJoin = "round";
     }
 
+    /*
+      O canvas não recebe rotação no JavaScript.
+
+      A rotação acontece somente na interface visual,
+      via CSS. As coordenadas do desenho continuam
+      corretas e a imagem exportada fica horizontal.
+    */
+
     function ajustarCanvas() {
       const rect = canvas.getBoundingClientRect();
 
-      if (
-        rect.width <= 0 ||
-        rect.height <= 0
-      ) {
-        return;
-      }
+      /*
+        getBoundingClientRect() retorna as dimensões
+        após a rotação CSS.
+
+        offsetWidth e offsetHeight representam as
+        dimensões reais do canvas antes da rotação.
+      */
 
       const largura = Math.max(
         1,
-        Math.round(rect.width)
+        Math.round(canvas.offsetWidth)
       );
 
       const altura = Math.max(
         1,
-        Math.round(rect.height)
+        Math.round(canvas.offsetHeight)
       );
+
+      if (!largura || !altura) {
+        return;
+      }
 
       const larguraAntiga = canvas.width;
       const alturaAntiga = canvas.height;
+
+      if (
+        larguraAntiga === largura &&
+        alturaAntiga === altura
+      ) {
+        return;
+      }
 
       const imagemAntiga = document.createElement(
         "canvas"
@@ -698,13 +770,6 @@
         imagemAntiga
           .getContext("2d")
           .drawImage(canvas, 0, 0);
-      }
-
-      if (
-        larguraAntiga === largura &&
-        alturaAntiga === altura
-      ) {
-        return;
       }
 
       canvas.width = largura;
@@ -829,8 +894,30 @@
       }
     }
 
+    /*
+      Converte a posição do dedo para as coordenadas
+      internas do canvas, inclusive quando a interface
+      está girada em 90 graus.
+    */
+
     function posicao(evento) {
       const rect = canvas.getBoundingClientRect();
+
+      const girado = window.matchMedia(
+        "(orientation: portrait) and (pointer: coarse)"
+      ).matches;
+
+      if (girado) {
+        return {
+          x:
+            (evento.clientY - rect.top) *
+            canvas.width / rect.height,
+
+          y:
+            (rect.right - evento.clientX) *
+            canvas.height / rect.width
+        };
+      }
 
       return {
         x:
@@ -922,6 +1009,14 @@
       pararDesenho
     );
 
+    /*
+      Recorta somente os traços da assinatura.
+
+      A linha de referência e os textos não entram
+      na imagem porque são elementos HTML separados
+      do canvas.
+    */
+
     function gerarAssinaturaPadronizada() {
       const largura = canvas.width;
       const altura = canvas.height;
@@ -943,9 +1038,7 @@
           const indice =
             (y * largura + x) * 4;
 
-          const alfa = pixels[indice + 3];
-
-          if (alfa > 10) {
+          if (pixels[indice + 3] > 10) {
             esquerda = Math.min(esquerda, x);
             direita = Math.max(direita, x);
             topo = Math.min(topo, y);
@@ -1047,9 +1140,7 @@
       "limparAssinatura"
     ).addEventListener(
       "click",
-      () => {
-        limparCanvas();
-      }
+      limparCanvas
     );
 
     document.getElementById(
@@ -1095,6 +1186,12 @@
       }
     );
 
+    /*
+      Se o celular mudar de orientação enquanto
+      o modal estiver aberto, redimensionamos
+      o canvas preservando os traços existentes.
+    */
+
     let ajustePendente = false;
 
     window.addEventListener(
@@ -1115,11 +1212,9 @@
         requestAnimationFrame(() => {
           ajustePendente = false;
 
-          if (desenhando) {
-            return;
+          if (!desenhando) {
+            ajustarCanvas();
           }
-
-          ajustarCanvas();
         });
       }
     );
