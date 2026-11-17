@@ -3,260 +3,683 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-  <title>Lista de Presença - Via Bebidas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lista de Presença | Via Bebidas</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      padding: 20px;
-      background: #f1f3f5;
+      background: #f3f5f8;
+      color: #202938;
       font-family: Arial, sans-serif;
-      color: #222;
     }
 
     .container {
-      max-width: 480px;
-      margin: 20px auto;
-      padding: 25px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px #00000015;
+      max-width: 540px;
+      margin: 28px auto;
+      padding: 24px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 5px 24px #00000012;
     }
 
     h1 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 5px;
+      margin: 0 0 8px;
+      color: #1769aa;
+      font-size: 27px;
     }
 
     .subtitulo {
-      text-align: center;
-      color: #666;
-      margin-bottom: 25px;
+      color: #637083;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
 
     label {
       display: block;
       font-weight: bold;
-      margin-top: 16px;
-      margin-bottom: 6px;
+      margin: 16px 0 7px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 13px;
+      border: 1px solid #cbd2dc;
+      border-radius: 8px;
       font-size: 16px;
-    }
-
-    canvas {
-      width: 100%;
-      height: 180px;
-      border: 2px solid #ccc;
-      border-radius: 6px;
-      background: white;
-      touch-action: none;
     }
 
     button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 6px;
+      border: 0;
+      border-radius: 9px;
+      padding: 14px 18px;
       font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    .limpar {
-      background: #e9ecef;
-      color: #333;
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
-    .enviar {
-      background: #087f5b;
+    .btn-assinar {
+      width: 100%;
+      margin-top: 12px;
+      color: #1769aa;
+      background: #e7f1fb;
+      border: 2px solid #1769aa;
+    }
+
+    .btn-enviar {
+      width: 100%;
+      margin-top: 22px;
       color: white;
-      font-weight: bold;
+      background: #1769aa;
     }
 
-    .aviso {
-      font-size: 13px;
-      color: #666;
-      margin-top: 15px;
+    .assinatura-preview {
+      width: 100%;
+      height: 125px;
+      margin-top: 8px;
+      border: 2px dashed #b6c2d0;
+      border-radius: 9px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .assinatura-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .assinatura-preview span {
+      color: #8390a0;
+      font-size: 14px;
+    }
+
+    #mensagem {
+      margin-top: 18px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .erro {
+      color: #b42318;
+    }
+
+    .sucesso {
+      color: #16723b;
+    }
+
+    /* Tela ampliada de assinatura */
+    .modal-assinatura {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #fff;
+      flex-direction: column;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    .modal-assinatura.aberto {
+      display: flex;
+    }
+
+    .modal-topo {
+      padding: 12px 16px;
+      background: #1769aa;
+      color: white;
       text-align: center;
+      flex-shrink: 0;
+    }
+
+    .modal-topo h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .modal-topo p {
+      margin: 5px 0 0;
+      font-size: 13px;
+    }
+
+    .area-desenho {
+      flex: 1;
+      min-height: 0;
+      padding: 10px;
+      background: #f5f7fa;
+      display: flex;
+    }
+
+    #canvasAssinatura {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: white;
+      border: 2px dashed #a6b4c4;
+      border-radius: 10px;
+      touch-action: none;
+    }
+
+    .modal-botoes {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      background: white;
+      border-top: 1px solid #e4e9ef;
+      flex-shrink: 0;
+    }
+
+    .modal-botoes button {
+      flex: 1;
+      padding: 13px 8px;
+      font-size: 14px;
+    }
+
+    .btn-cancelar {
+      background: #e9edf2;
+      color: #263445;
+    }
+
+    .btn-limpar {
+      background: #ffe8e6;
+      color: #a32b21;
+    }
+
+    .btn-confirmar {
+      background: #1769aa;
+      color: white;
+    }
+
+    body.modal-aberto {
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 12px;
+        padding: 18px;
+      }
+
+      .modal-topo {
+        padding: 9px 12px;
+      }
+
+      .modal-botoes {
+        padding-left: 8px;
+        padding-right: 8px;
+        gap: 6px;
+      }
+
+      .modal-botoes button {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>VIA BEBIDAS</h1>
+
+  <main class="container">
+    <h1>Via Bebidas</h1>
     <p class="subtitulo">
-      Lista de Presença de Treinamento
+      Lista de presença digital de treinamentos
     </p>
 
     <form id="formulario">
+
       <label for="nome">Nome completo</label>
-      <input id="nome" required maxlength="150">
+      <input
+        id="nome"
+        maxlength="150"
+        autocomplete="name"
+        required
+      >
 
       <label for="matricula">Matrícula</label>
-      <input id="matricula" required maxlength="30">
+      <input
+        id="matricula"
+        maxlength="30"
+        required
+      >
 
       <label for="funcao">Função</label>
-      <input id="funcao" maxlength="100">
+      <input
+        id="funcao"
+        maxlength="100"
+      >
 
       <label for="setor">Setor</label>
-      <input id="setor" required maxlength="100">
+      <input
+        id="setor"
+        maxlength="100"
+        required
+      >
 
-      <label>Assinatura</label>
-      <canvas id="assinatura"></canvas>
+      <label>Assinatura do funcionário</label>
 
-      <button type="button"
-              class="limpar"
-              id="limpar">
-        Limpar assinatura
+      <div class="assinatura-preview">
+        <span id="textoPreview">
+          Nenhuma assinatura registrada
+        </span>
+        <img
+          id="imagemPreview"
+          alt="Prévia da assinatura"
+        >
+      </div>
+
+      <button
+        type="button"
+        class="btn-assinar"
+        id="abrirAssinatura"
+      >
+        Assinar em tela cheia
       </button>
 
-      <button type="submit" class="enviar">
+      <button
+        type="submit"
+        class="btn-enviar"
+        id="enviar"
+      >
         Registrar presença
       </button>
-    </form>
 
-    <p class="aviso" id="mensagem">
-      Página em configuração.
-      Nenhum dado será enviado nesta etapa.
-    </p>
+      <p
+        id="mensagem"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+  </main>
+
+  <!-- Área de assinatura ampliada -->
+  <div
+    class="modal-assinatura"
+    id="modalAssinatura"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Assinar em tela cheia"
+  >
+
+    <div class="modal-topo">
+      <h2>Faça sua assinatura</h2>
+      <p>Utilize o dedo para assinar na área branca.</p>
+    </div>
+
+    <div class="area-desenho">
+      <canvas id="canvasAssinatura"></canvas>
+    </div>
+
+    <div class="modal-botoes">
+      <button
+        type="button"
+        class="btn-cancelar"
+        id="cancelarAssinatura"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-limpar"
+        id="limparAssinatura"
+      >
+        Limpar
+      </button>
+
+      <button
+        type="button"
+        class="btn-confirmar"
+        id="confirmarAssinatura"
+      >
+        Confirmar
+      </button>
+    </div>
+
   </div>
 
   <script>
-    
-const parametros = new URLSearchParams(window.location.search);
-const codigoTreinamento = parametros.get("codigo");
+    const URL_FUNCAO =
+      "https://brpjkexhqyrdbwcpauzx.supabase.co/functions/v1/registrar-presenca";
 
-if (!codigoTreinamento) {
-  document.getElementById("mensagem").textContent =
-    "Link de treinamento inválido. Solicite um novo link ao responsável.";
+    const parametros = new URLSearchParams(
+      window.location.search
+    );
 
-  document.querySelector(".enviar").disabled = true;
-}
+    const codigo = parametros.get("codigo");
 
-    const canvas = document.getElementById("assinatura");
-    const ctx = canvas.getContext("2d");
+    const formulario = document.getElementById("formulario");
+    const enviar = document.getElementById("enviar");
+    const mensagem = document.getElementById("mensagem");
+
+    const modal = document.getElementById("modalAssinatura");
+    const canvas = document.getElementById("canvasAssinatura");
+    const contexto = canvas.getContext("2d");
+
+    const imagemPreview = document.getElementById("imagemPreview");
+    const textoPreview = document.getElementById("textoPreview");
 
     let desenhando = false;
-    let assinou = false;
+    let temTracos = false;
+    let assinaturaConfirmada = null;
+    let assinaturaAnterior = null;
+    let ultimoFoco = null;
+
+    function mostrarMensagem(texto, sucesso = false) {
+      mensagem.textContent = texto;
+      mensagem.className = sucesso ? "sucesso" : "erro";
+    }
+
+    function prepararPincel() {
+      contexto.strokeStyle = "#14233a";
+      contexto.lineWidth = 3;
+      contexto.lineCap = "round";
+      contexto.lineJoin = "round";
+    }
 
     function ajustarCanvas() {
-      const largura = canvas.clientWidth;
-      const altura = canvas.clientHeight;
+      const rect = canvas.getBoundingClientRect();
+
+      const largura = Math.max(300, Math.round(rect.width));
+      const altura = Math.max(150, Math.round(rect.height));
+
+      const imagemAntiga = document.createElement("canvas");
+      imagemAntiga.width = canvas.width || largura;
+      imagemAntiga.height = canvas.height || altura;
+
+      if (canvas.width && canvas.height) {
+        imagemAntiga.getContext("2d").drawImage(canvas, 0, 0);
+      }
 
       canvas.width = largura;
       canvas.height = altura;
 
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = "#111";
+      prepararPincel();
 
-      assinou = false;
+      if (temTracos) {
+        contexto.drawImage(
+          imagemAntiga,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+      }
     }
 
-    ajustarCanvas();
+    function limparCanvas() {
+      contexto.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      temTracos = false;
+      desenhando = false;
+    }
+
+    function mostrarPreview() {
+      if (assinaturaConfirmada) {
+        imagemPreview.src = assinaturaConfirmada;
+        imagemPreview.style.display = "block";
+        textoPreview.style.display = "none";
+      } else {
+        imagemPreview.removeAttribute("src");
+        imagemPreview.style.display = "none";
+        textoPreview.style.display = "block";
+      }
+    }
+
+    function abrirModal() {
+      ultimoFoco = document.activeElement;
+      assinaturaAnterior = assinaturaConfirmada;
+
+      modal.classList.add("aberto");
+      document.body.classList.add("modal-aberto");
+
+      ajustarCanvas();
+      limparCanvas();
+
+      if (assinaturaConfirmada) {
+        const imagem = new Image();
+
+        imagem.onload = () => {
+          if (!modal.classList.contains("aberto")) return;
+
+          contexto.drawImage(
+            imagem,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          temTracos = true;
+        };
+
+        imagem.src = assinaturaConfirmada;
+      }
+
+      document.getElementById("confirmarAssinatura").focus();
+    }
+
+    function fecharModal() {
+      modal.classList.remove("aberto");
+      document.body.classList.remove("modal-aberto");
+
+      if (ultimoFoco && ultimoFoco.focus) {
+        ultimoFoco.focus();
+      }
+    }
 
     function posicao(evento) {
       const rect = canvas.getBoundingClientRect();
 
       return {
-        x: evento.clientX - rect.left,
-        y: evento.clientY - rect.top
+        x: (evento.clientX - rect.left) * canvas.width / rect.width,
+        y: (evento.clientY - rect.top) * canvas.height / rect.height
       };
     }
 
     canvas.addEventListener("pointerdown", (evento) => {
+      if (evento.pointerType === "mouse" && evento.button !== 0) {
+        return;
+      }
+
+      evento.preventDefault();
+
       desenhando = true;
+      temTracos = true;
+
       canvas.setPointerCapture(evento.pointerId);
 
       const p = posicao(evento);
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
+
+      contexto.beginPath();
+      contexto.moveTo(p.x, p.y);
+      contexto.lineTo(p.x, p.y);
+      contexto.stroke();
     });
 
     canvas.addEventListener("pointermove", (evento) => {
       if (!desenhando) return;
 
+      evento.preventDefault();
+
       const p = posicao(evento);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
-      assinou = true;
+      contexto.lineTo(p.x, p.y);
+      contexto.stroke();
     });
 
-    function parar() {
+    function pararDesenho() {
       desenhando = false;
     }
 
-    canvas.addEventListener("pointerup", parar);
-    canvas.addEventListener("pointercancel", parar);
+    canvas.addEventListener("pointerup", pararDesenho);
+    canvas.addEventListener("pointercancel", pararDesenho);
+    canvas.addEventListener("lostpointercapture", pararDesenho);
 
-    document.getElementById("limpar")
+    document.getElementById("abrirAssinatura")
+      .addEventListener("click", abrirModal);
+
+    document.getElementById("limparAssinatura")
       .addEventListener("click", () => {
-        ajustarCanvas();
+        limparCanvas();
       });
 
-    document.getElementById("formulario")
-      .addEventListener("submit", async (evento) => {
-        evento.preventDefault();
+    document.getElementById("cancelarAssinatura")
+      .addEventListener("click", () => {
+        assinaturaConfirmada = assinaturaAnterior;
+        fecharModal();
+        mostrarPreview();
+      });
 
-        const mensagem =
-          document.getElementById("mensagem");
-
-        if (!assinou) {
-          mensagem.textContent =
-            "Por favor, faça sua assinatura.";
+    document.getElementById("confirmarAssinatura")
+      .addEventListener("click", () => {
+        if (!temTracos) {
+          alert("Faça sua assinatura antes de confirmar.");
           return;
         }
 
+        // Padroniza a assinatura para o Supabase:
+        // PNG de 800 x 300 pixels.
+        const saida = document.createElement("canvas");
+        saida.width = 800;
+        saida.height = 300;
 
-mensagem.textContent = "Verificando conexão com o servidor...";
+        const ctxSaida = saida.getContext("2d");
 
-try {
-  const resposta = await fetch(
-    "https://brpjkexhqyrdbwcpauzx.supabase.co/functions/v1/registrar-presenca",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      
-body: JSON.stringify({
-  codigo_acesso: codigoTreinamento,
-  nome: document.getElementById("nome").value.trim(),
-  matricula: document.getElementById("matricula").value.trim(),
-  funcao: document.getElementById("funcao").value.trim(),
-  setor: document.getElementById("setor").value.trim(),
-  assinatura: canvas.toDataURL("image/png")
-})
+        ctxSaida.clearRect(0, 0, 800, 300);
 
-    }
-  );
+        const escala = Math.min(
+          800 / canvas.width,
+          300 / canvas.height
+        );
 
-  const resultado = await resposta.json();
+        const larguraFinal = canvas.width * escala;
+        const alturaFinal = canvas.height * escala;
 
-  mensagem.textContent =
-    resultado.mensagem ||
-    resultado.erro ||
-    "Resposta recebida do servidor";
+        ctxSaida.drawImage(
+          canvas,
+          (800 - larguraFinal) / 2,
+          (300 - alturaFinal) / 2,
+          larguraFinal,
+          alturaFinal
+        );
 
-} catch (erro) {
-  mensagem.textContent =
-    "Não foi possível conectar ao servidor.";
-}
+        assinaturaConfirmada = saida.toDataURL("image/png");
 
+        mostrarPreview();
+        mostrarMensagem("");
+        fecharModal();
       });
+
+    // Ajusta a área caso o celular seja girado.
+    window.addEventListener("resize", () => {
+      if (!modal.classList.contains("aberto")) return;
+
+      ajustarCanvas();
+    });
+
+    if (!codigo) {
+      enviar.disabled = true;
+      mostrarMensagem(
+        "Link inválido: código do treinamento não informado."
+      );
+    }
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      if (!codigo) {
+        mostrarMensagem(
+          "Código do treinamento não encontrado."
+        );
+        return;
+      }
+
+      if (!assinaturaConfirmada) {
+        mostrarMensagem(
+          "Clique em 'Assinar em tela cheia' e confirme sua assinatura."
+        );
+        return;
+      }
+
+      enviar.disabled = true;
+      enviar.textContent = "Registrando...";
+      mostrarMensagem("");
+
+      const dados = {
+        codigo_acesso: codigo,
+        nome: document.getElementById("nome").value.trim(),
+        matricula: document.getElementById("matricula").value.trim(),
+        funcao: document.getElementById("funcao").value.trim(),
+        setor: document.getElementById("setor").value.trim(),
+        assinatura: assinaturaConfirmada
+      };
+
+      try {
+        const resposta = await fetch(URL_FUNCAO, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dados)
+        });
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok || !resultado.sucesso) {
+          throw new Error(
+            resultado.erro ||
+            resultado.mensagem ||
+            "Não foi possível registrar a presença."
+          );
+        }
+
+        mostrarMensagem(
+          "Presença registrada com sucesso!",
+          true
+        );
+
+        formulario.reset();
+
+        assinaturaConfirmada = null;
+        assinaturaAnterior = null;
+        limparCanvas();
+        mostrarPreview();
+
+        enviar.textContent = "Presença registrada";
+        enviar.disabled = true;
+
+      } catch (erro) {
+        mostrarMensagem(
+          erro.message ||
+          "Erro de conexão. Tente novamente."
+        );
+
+        enviar.disabled = false;
+        enviar.textContent = "Registrar presença";
+      }
+    });
+
+    mostrarPreview();
   </script>
 </body>
 </html>
