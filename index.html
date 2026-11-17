@@ -3,7 +3,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
   <title>Lista de Presença | Via Bebidas</title>
 
   <style>
@@ -35,8 +39,31 @@
 
     .subtitulo {
       color: #637083;
-      margin-bottom: 24px;
+      margin: 0 0 14px;
       line-height: 1.5;
+    }
+
+    .treinamento-info {
+      margin-bottom: 24px;
+      padding: 13px 15px;
+      background: #eaf3fc;
+      border-left: 4px solid #1769aa;
+      border-radius: 8px;
+    }
+
+    .treinamento-info strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #1769aa;
+      font-size: 13px;
+    }
+
+    .treinamento-info span {
+      display: block;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
     }
 
     label {
@@ -78,7 +105,7 @@
     .btn-enviar {
       width: 100%;
       margin-top: 22px;
-      color: white;
+      color: #fff;
       background: #1769aa;
     }
 
@@ -88,7 +115,7 @@
       margin-top: 8px;
       border: 2px dashed #b6c2d0;
       border-radius: 9px;
-      background: white;
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -122,16 +149,17 @@
     }
 
     /* Tela ampliada de assinatura */
+
     .modal-assinatura {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: #fff;
-      flex-direction: column;
       width: 100%;
       height: 100dvh;
       overflow: hidden;
+      background: #fff;
+      flex-direction: column;
     }
 
     .modal-assinatura.aberto {
@@ -139,9 +167,9 @@
     }
 
     .modal-topo {
-      padding: 12px 16px;
+      padding: 10px 16px;
       background: #1769aa;
-      color: white;
+      color: #fff;
       text-align: center;
       flex-shrink: 0;
     }
@@ -164,22 +192,73 @@
       display: flex;
     }
 
+    .quadro-assinatura {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      background: #fff;
+      border: 2px dashed #a6b4c4;
+      border-radius: 10px;
+    }
+
     #canvasAssinatura {
+      position: absolute;
+      inset: 0;
       display: block;
       width: 100%;
       height: 100%;
-      background: white;
-      border: 2px dashed #a6b4c4;
-      border-radius: 10px;
       touch-action: none;
+      z-index: 2;
+    }
+
+    .guia-assinatura {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .guia-texto {
+      position: absolute;
+      top: 14px;
+      left: 12px;
+      right: 12px;
+      color: #8492a4;
+      font-size: 13px;
+      text-align: center;
+      user-select: none;
+    }
+
+    .guia-linha {
+      position: absolute;
+      top: 68%;
+      left: 5%;
+      width: 90%;
+      border-bottom: 1px solid #c2cad5;
+    }
+
+    .guia-direcao {
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      color: #8492a4;
+      font-size: 12px;
+      text-align: center;
+      user-select: none;
     }
 
     .modal-botoes {
       display: flex;
       gap: 10px;
       padding: 12px 16px;
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-      background: white;
+      padding-bottom: max(
+        12px,
+        env(safe-area-inset-bottom)
+      );
+      background: #fff;
       border-top: 1px solid #e4e9ef;
       flex-shrink: 0;
     }
@@ -202,7 +281,7 @@
 
     .btn-confirmar {
       background: #1769aa;
-      color: white;
+      color: #fff;
     }
 
     body.modal-aberto {
@@ -216,7 +295,15 @@
       }
 
       .modal-topo {
-        padding: 9px 12px;
+        padding: 8px 12px;
+      }
+
+      .modal-topo h2 {
+        font-size: 17px;
+      }
+
+      .area-desenho {
+        padding: 6px;
       }
 
       .modal-botoes {
@@ -227,6 +314,44 @@
 
       .modal-botoes button {
         font-size: 13px;
+        padding: 12px 5px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .modal-topo {
+        padding: 5px 12px;
+      }
+
+      .modal-topo h2 {
+        font-size: 15px;
+      }
+
+      .modal-topo p {
+        margin-top: 2px;
+        font-size: 11px;
+      }
+
+      .modal-botoes {
+        padding-top: 6px;
+        padding-bottom: max(
+          6px,
+          env(safe-area-inset-bottom)
+        );
+      }
+
+      .modal-botoes button {
+        padding: 9px 5px;
+      }
+
+      .guia-texto {
+        top: 7px;
+        font-size: 11px;
+      }
+
+      .guia-direcao {
+        bottom: 5px;
+        font-size: 10px;
       }
     }
   </style>
@@ -236,9 +361,21 @@
 
   <main class="container">
     <h1>Via Bebidas</h1>
+
     <p class="subtitulo">
       Lista de presença digital de treinamentos
     </p>
+
+    <div
+      class="treinamento-info"
+      aria-live="polite"
+    >
+      <strong>Treinamento</strong>
+
+      <span id="nomeTreinamento">
+        Carregando treinamento...
+      </span>
+    </div>
 
     <form id="formulario">
 
@@ -276,6 +413,7 @@
         <span id="textoPreview">
           Nenhuma assinatura registrada
         </span>
+
         <img
           id="imagemPreview"
           alt="Prévia da assinatura"
@@ -294,6 +432,7 @@
         type="submit"
         class="btn-enviar"
         id="enviar"
+        disabled
       >
         Registrar presença
       </button>
@@ -308,6 +447,7 @@
   </main>
 
   <!-- Área de assinatura ampliada -->
+
   <div
     class="modal-assinatura"
     id="modalAssinatura"
@@ -318,11 +458,33 @@
 
     <div class="modal-topo">
       <h2>Faça sua assinatura</h2>
-      <p>Utilize o dedo para assinar na área branca.</p>
+
+      <p>
+        Assine com o dedo seguindo o sentido da linha.
+      </p>
     </div>
 
     <div class="area-desenho">
-      <canvas id="canvasAssinatura"></canvas>
+      <div class="quadro-assinatura">
+
+        <div
+          class="guia-assinatura"
+          aria-hidden="true"
+        >
+          <div class="guia-texto">
+            Assine seu nome sobre a linha
+          </div>
+
+          <div class="guia-linha"></div>
+
+          <div class="guia-direcao">
+            Início à esquerda → Final à direita
+          </div>
+        </div>
+
+        <canvas id="canvasAssinatura"></canvas>
+
+      </div>
     </div>
 
     <div class="modal-botoes">
@@ -354,8 +516,19 @@
   </div>
 
   <script>
+    const SUPABASE_URL =
+      "https://brpjkexhqyrdbwcpauzx.supabase.co";
+
+    const SUPABASE_PUBLIC_KEY =
+      "sb_publishable_BLiXeI0liB-xSRI11-Gv-g_hZ2eIYSY";
+
     const URL_FUNCAO =
-      "https://brpjkexhqyrdbwcpauzx.supabase.co/functions/v1/registrar-presenca";
+      SUPABASE_URL +
+      "/functions/v1/registrar-presenca";
+
+    const URL_NOME_TREINAMENTO =
+      SUPABASE_URL +
+      "/rest/v1/rpc/obter_nome_treinamento";
 
     const parametros = new URLSearchParams(
       window.location.search
@@ -363,26 +536,121 @@
 
     const codigo = parametros.get("codigo");
 
-    const formulario = document.getElementById("formulario");
-    const enviar = document.getElementById("enviar");
-    const mensagem = document.getElementById("mensagem");
+    const formulario = document.getElementById(
+      "formulario"
+    );
 
-    const modal = document.getElementById("modalAssinatura");
-    const canvas = document.getElementById("canvasAssinatura");
+    const enviar = document.getElementById(
+      "enviar"
+    );
+
+    const mensagem = document.getElementById(
+      "mensagem"
+    );
+
+    const nomeTreinamento = document.getElementById(
+      "nomeTreinamento"
+    );
+
+    const modal = document.getElementById(
+      "modalAssinatura"
+    );
+
+    const canvas = document.getElementById(
+      "canvasAssinatura"
+    );
+
     const contexto = canvas.getContext("2d");
 
-    const imagemPreview = document.getElementById("imagemPreview");
-    const textoPreview = document.getElementById("textoPreview");
+    const imagemPreview = document.getElementById(
+      "imagemPreview"
+    );
+
+    const textoPreview = document.getElementById(
+      "textoPreview"
+    );
 
     let desenhando = false;
     let temTracos = false;
     let assinaturaConfirmada = null;
     let assinaturaAnterior = null;
     let ultimoFoco = null;
+    let treinamentoCarregado = false;
+    let ponteiroAtivo = null;
 
     function mostrarMensagem(texto, sucesso = false) {
       mensagem.textContent = texto;
-      mensagem.className = sucesso ? "sucesso" : "erro";
+      mensagem.className = sucesso
+        ? "sucesso"
+        : "erro";
+    }
+
+    function atualizarBotaoEnviar() {
+      if (!treinamentoCarregado) {
+        enviar.disabled = true;
+      }
+    }
+
+    async function carregarTreinamento() {
+      if (!codigo) {
+        nomeTreinamento.textContent =
+          "Treinamento não identificado";
+
+        mostrarMensagem(
+          "Link inválido: código do treinamento não informado."
+        );
+
+        return;
+      }
+
+      try {
+        const resposta = await fetch(
+          URL_NOME_TREINAMENTO,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_PUBLIC_KEY
+            },
+            body: JSON.stringify({
+              p_codigo: codigo
+            })
+          }
+        );
+
+        if (!resposta.ok) {
+          throw new Error(
+            "Não foi possível consultar o treinamento."
+          );
+        }
+
+        const nome = await resposta.json();
+
+        if (
+          typeof nome !== "string" ||
+          !nome.trim()
+        ) {
+          throw new Error(
+            "Treinamento não encontrado. Verifique o link."
+          );
+        }
+
+        nomeTreinamento.textContent = nome;
+
+        treinamentoCarregado = true;
+        enviar.disabled = false;
+
+      } catch (erro) {
+        nomeTreinamento.textContent =
+          "Não foi possível carregar o treinamento";
+
+        mostrarMensagem(
+          erro.message ||
+          "Erro ao carregar o treinamento."
+        );
+
+        atualizarBotaoEnviar();
+      }
     }
 
     function prepararPincel() {
@@ -395,15 +663,48 @@
     function ajustarCanvas() {
       const rect = canvas.getBoundingClientRect();
 
-      const largura = Math.max(300, Math.round(rect.width));
-      const altura = Math.max(150, Math.round(rect.height));
+      if (
+        rect.width <= 0 ||
+        rect.height <= 0
+      ) {
+        return;
+      }
 
-      const imagemAntiga = document.createElement("canvas");
-      imagemAntiga.width = canvas.width || largura;
-      imagemAntiga.height = canvas.height || altura;
+      const largura = Math.max(
+        1,
+        Math.round(rect.width)
+      );
 
-      if (canvas.width && canvas.height) {
-        imagemAntiga.getContext("2d").drawImage(canvas, 0, 0);
+      const altura = Math.max(
+        1,
+        Math.round(rect.height)
+      );
+
+      const larguraAntiga = canvas.width;
+      const alturaAntiga = canvas.height;
+
+      const imagemAntiga = document.createElement(
+        "canvas"
+      );
+
+      if (
+        larguraAntiga > 0 &&
+        alturaAntiga > 0 &&
+        temTracos
+      ) {
+        imagemAntiga.width = larguraAntiga;
+        imagemAntiga.height = alturaAntiga;
+
+        imagemAntiga
+          .getContext("2d")
+          .drawImage(canvas, 0, 0);
+      }
+
+      if (
+        larguraAntiga === largura &&
+        alturaAntiga === altura
+      ) {
+        return;
       }
 
       canvas.width = largura;
@@ -411,13 +712,24 @@
 
       prepararPincel();
 
-      if (temTracos) {
+      if (temTracos && imagemAntiga.width) {
+        const escala = Math.min(
+          largura / larguraAntiga,
+          altura / alturaAntiga
+        );
+
+        const larguraFinal =
+          larguraAntiga * escala;
+
+        const alturaFinal =
+          alturaAntiga * escala;
+
         contexto.drawImage(
           imagemAntiga,
-          0,
-          0,
-          canvas.width,
-          canvas.height
+          (largura - larguraFinal) / 2,
+          (altura - alturaFinal) / 2,
+          larguraFinal,
+          alturaFinal
         );
       }
     }
@@ -432,6 +744,7 @@
 
       temTracos = false;
       desenhando = false;
+      ponteiroAtivo = null;
     }
 
     function mostrarPreview() {
@@ -446,12 +759,35 @@
       }
     }
 
+    function desenharImagemProporcional(imagem) {
+      const escala = Math.min(
+        canvas.width / imagem.width,
+        canvas.height / imagem.height
+      );
+
+      const larguraFinal =
+        imagem.width * escala;
+
+      const alturaFinal =
+        imagem.height * escala;
+
+      contexto.drawImage(
+        imagem,
+        (canvas.width - larguraFinal) / 2,
+        (canvas.height - alturaFinal) / 2,
+        larguraFinal,
+        alturaFinal
+      );
+    }
+
     function abrirModal() {
       ultimoFoco = document.activeElement;
       assinaturaAnterior = assinaturaConfirmada;
 
       modal.classList.add("aberto");
-      document.body.classList.add("modal-aberto");
+      document.body.classList.add(
+        "modal-aberto"
+      );
 
       ajustarCanvas();
       limparCanvas();
@@ -460,30 +796,35 @@
         const imagem = new Image();
 
         imagem.onload = () => {
-          if (!modal.classList.contains("aberto")) return;
+          if (
+            !modal.classList.contains("aberto")
+          ) {
+            return;
+          }
 
-          contexto.drawImage(
-            imagem,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          );
-
+          desenharImagemProporcional(imagem);
           temTracos = true;
         };
 
         imagem.src = assinaturaConfirmada;
       }
 
-      document.getElementById("confirmarAssinatura").focus();
+      document.getElementById(
+        "confirmarAssinatura"
+      ).focus();
     }
 
     function fecharModal() {
       modal.classList.remove("aberto");
-      document.body.classList.remove("modal-aberto");
 
-      if (ultimoFoco && ultimoFoco.focus) {
+      document.body.classList.remove(
+        "modal-aberto"
+      );
+
+      if (
+        ultimoFoco &&
+        ultimoFoco.focus
+      ) {
         ultimoFoco.focus();
       }
     }
@@ -492,194 +833,406 @@
       const rect = canvas.getBoundingClientRect();
 
       return {
-        x: (evento.clientX - rect.left) * canvas.width / rect.width,
-        y: (evento.clientY - rect.top) * canvas.height / rect.height
+        x:
+          (evento.clientX - rect.left) *
+          canvas.width / rect.width,
+
+        y:
+          (evento.clientY - rect.top) *
+          canvas.height / rect.height
       };
     }
 
-    canvas.addEventListener("pointerdown", (evento) => {
-      if (evento.pointerType === "mouse" && evento.button !== 0) {
-        return;
-      }
-
-      evento.preventDefault();
-
-      desenhando = true;
-      temTracos = true;
-
-      canvas.setPointerCapture(evento.pointerId);
-
-      const p = posicao(evento);
-
-      contexto.beginPath();
-      contexto.moveTo(p.x, p.y);
-      contexto.lineTo(p.x, p.y);
-      contexto.stroke();
-    });
-
-    canvas.addEventListener("pointermove", (evento) => {
-      if (!desenhando) return;
-
-      evento.preventDefault();
-
-      const p = posicao(evento);
-      contexto.lineTo(p.x, p.y);
-      contexto.stroke();
-    });
-
-    function pararDesenho() {
-      desenhando = false;
-    }
-
-    canvas.addEventListener("pointerup", pararDesenho);
-    canvas.addEventListener("pointercancel", pararDesenho);
-    canvas.addEventListener("lostpointercapture", pararDesenho);
-
-    document.getElementById("abrirAssinatura")
-      .addEventListener("click", abrirModal);
-
-    document.getElementById("limparAssinatura")
-      .addEventListener("click", () => {
-        limparCanvas();
-      });
-
-    document.getElementById("cancelarAssinatura")
-      .addEventListener("click", () => {
-        assinaturaConfirmada = assinaturaAnterior;
-        fecharModal();
-        mostrarPreview();
-      });
-
-    document.getElementById("confirmarAssinatura")
-      .addEventListener("click", () => {
-        if (!temTracos) {
-          alert("Faça sua assinatura antes de confirmar.");
+    canvas.addEventListener(
+      "pointerdown",
+      (evento) => {
+        if (
+          evento.pointerType === "mouse" &&
+          evento.button !== 0
+        ) {
           return;
         }
 
-        // Padroniza a assinatura para o Supabase:
-        // PNG de 800 x 300 pixels.
-        const saida = document.createElement("canvas");
-        saida.width = 800;
-        saida.height = 300;
-
-        const ctxSaida = saida.getContext("2d");
-
-        ctxSaida.clearRect(0, 0, 800, 300);
-
-        const escala = Math.min(
-          800 / canvas.width,
-          300 / canvas.height
-        );
-
-        const larguraFinal = canvas.width * escala;
-        const alturaFinal = canvas.height * escala;
-
-        ctxSaida.drawImage(
-          canvas,
-          (800 - larguraFinal) / 2,
-          (300 - alturaFinal) / 2,
-          larguraFinal,
-          alturaFinal
-        );
-
-        assinaturaConfirmada = saida.toDataURL("image/png");
-
-        mostrarPreview();
-        mostrarMensagem("");
-        fecharModal();
-      });
-
-    // Ajusta a área caso o celular seja girado.
-    window.addEventListener("resize", () => {
-      if (!modal.classList.contains("aberto")) return;
-
-      ajustarCanvas();
-    });
-
-    if (!codigo) {
-      enviar.disabled = true;
-      mostrarMensagem(
-        "Link inválido: código do treinamento não informado."
-      );
-    }
-
-    formulario.addEventListener("submit", async (evento) => {
-      evento.preventDefault();
-
-      if (!codigo) {
-        mostrarMensagem(
-          "Código do treinamento não encontrado."
-        );
-        return;
-      }
-
-      if (!assinaturaConfirmada) {
-        mostrarMensagem(
-          "Clique em 'Assinar em tela cheia' e confirme sua assinatura."
-        );
-        return;
-      }
-
-      enviar.disabled = true;
-      enviar.textContent = "Registrando...";
-      mostrarMensagem("");
-
-      const dados = {
-        codigo_acesso: codigo,
-        nome: document.getElementById("nome").value.trim(),
-        matricula: document.getElementById("matricula").value.trim(),
-        funcao: document.getElementById("funcao").value.trim(),
-        setor: document.getElementById("setor").value.trim(),
-        assinatura: assinaturaConfirmada
-      };
-
-      try {
-        const resposta = await fetch(URL_FUNCAO, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(dados)
-        });
-
-        const resultado = await resposta.json();
-
-        if (!resposta.ok || !resultado.sucesso) {
-          throw new Error(
-            resultado.erro ||
-            resultado.mensagem ||
-            "Não foi possível registrar a presença."
-          );
+        if (desenhando) {
+          return;
         }
 
-        mostrarMensagem(
-          "Presença registrada com sucesso!",
-          true
+        evento.preventDefault();
+
+        desenhando = true;
+        temTracos = true;
+        ponteiroAtivo = evento.pointerId;
+
+        canvas.setPointerCapture(
+          evento.pointerId
         );
 
-        formulario.reset();
+        const p = posicao(evento);
 
-        assinaturaConfirmada = null;
-        assinaturaAnterior = null;
-        limparCanvas();
-        mostrarPreview();
-
-        enviar.textContent = "Presença registrada";
-        enviar.disabled = true;
-
-      } catch (erro) {
-        mostrarMensagem(
-          erro.message ||
-          "Erro de conexão. Tente novamente."
-        );
-
-        enviar.disabled = false;
-        enviar.textContent = "Registrar presença";
+        contexto.beginPath();
+        contexto.moveTo(p.x, p.y);
+        contexto.lineTo(p.x, p.y);
+        contexto.stroke();
       }
-    });
+    );
+
+    canvas.addEventListener(
+      "pointermove",
+      (evento) => {
+        if (
+          !desenhando ||
+          evento.pointerId !== ponteiroAtivo
+        ) {
+          return;
+        }
+
+        evento.preventDefault();
+
+        const p = posicao(evento);
+
+        contexto.lineTo(p.x, p.y);
+        contexto.stroke();
+      }
+    );
+
+    function pararDesenho(evento) {
+      if (
+        evento &&
+        evento.pointerId !== ponteiroAtivo
+      ) {
+        return;
+      }
+
+      desenhando = false;
+      ponteiroAtivo = null;
+    }
+
+    canvas.addEventListener(
+      "pointerup",
+      pararDesenho
+    );
+
+    canvas.addEventListener(
+      "pointercancel",
+      pararDesenho
+    );
+
+    canvas.addEventListener(
+      "lostpointercapture",
+      pararDesenho
+    );
+
+    function gerarAssinaturaPadronizada() {
+      const largura = canvas.width;
+      const altura = canvas.height;
+
+      const pixels = contexto.getImageData(
+        0,
+        0,
+        largura,
+        altura
+      ).data;
+
+      let esquerda = largura;
+      let direita = -1;
+      let topo = altura;
+      let base = -1;
+
+      for (let y = 0; y < altura; y++) {
+        for (let x = 0; x < largura; x++) {
+          const indice =
+            (y * largura + x) * 4;
+
+          const alfa = pixels[indice + 3];
+
+          if (alfa > 10) {
+            esquerda = Math.min(esquerda, x);
+            direita = Math.max(direita, x);
+            topo = Math.min(topo, y);
+            base = Math.max(base, y);
+          }
+        }
+      }
+
+      if (direita < esquerda || base < topo) {
+        throw new Error(
+          "Não foi possível identificar a assinatura."
+        );
+      }
+
+      const margem = 12;
+
+      esquerda = Math.max(
+        0,
+        esquerda - margem
+      );
+
+      topo = Math.max(
+        0,
+        topo - margem
+      );
+
+      direita = Math.min(
+        largura - 1,
+        direita + margem
+      );
+
+      base = Math.min(
+        altura - 1,
+        base + margem
+      );
+
+      const larguraRecorte =
+        direita - esquerda + 1;
+
+      const alturaRecorte =
+        base - topo + 1;
+
+      const saida = document.createElement(
+        "canvas"
+      );
+
+      saida.width = 800;
+      saida.height = 300;
+
+      const ctxSaida = saida.getContext(
+        "2d"
+      );
+
+      const margemSaida = 18;
+
+      const larguraDisponivel =
+        saida.width - margemSaida * 2;
+
+      const alturaDisponivel =
+        saida.height - margemSaida * 2;
+
+      const escala = Math.min(
+        larguraDisponivel / larguraRecorte,
+        alturaDisponivel / alturaRecorte
+      );
+
+      const larguraFinal =
+        larguraRecorte * escala;
+
+      const alturaFinal =
+        alturaRecorte * escala;
+
+      ctxSaida.imageSmoothingEnabled = true;
+      ctxSaida.imageSmoothingQuality = "high";
+
+      ctxSaida.drawImage(
+        canvas,
+        esquerda,
+        topo,
+        larguraRecorte,
+        alturaRecorte,
+        (saida.width - larguraFinal) / 2,
+        (saida.height - alturaFinal) / 2,
+        larguraFinal,
+        alturaFinal
+      );
+
+      return saida.toDataURL("image/png");
+    }
+
+    document.getElementById(
+      "abrirAssinatura"
+    ).addEventListener(
+      "click",
+      abrirModal
+    );
+
+    document.getElementById(
+      "limparAssinatura"
+    ).addEventListener(
+      "click",
+      () => {
+        limparCanvas();
+      }
+    );
+
+    document.getElementById(
+      "cancelarAssinatura"
+    ).addEventListener(
+      "click",
+      () => {
+        assinaturaConfirmada =
+          assinaturaAnterior;
+
+        fecharModal();
+        mostrarPreview();
+      }
+    );
+
+    document.getElementById(
+      "confirmarAssinatura"
+    ).addEventListener(
+      "click",
+      () => {
+        if (!temTracos) {
+          alert(
+            "Faça sua assinatura antes de confirmar."
+          );
+
+          return;
+        }
+
+        try {
+          assinaturaConfirmada =
+            gerarAssinaturaPadronizada();
+
+          mostrarPreview();
+          mostrarMensagem("");
+          fecharModal();
+
+        } catch (erro) {
+          alert(
+            erro.message ||
+            "Não foi possível salvar a assinatura."
+          );
+        }
+      }
+    );
+
+    let ajustePendente = false;
+
+    window.addEventListener(
+      "resize",
+      () => {
+        if (
+          !modal.classList.contains("aberto")
+        ) {
+          return;
+        }
+
+        if (ajustePendente) {
+          return;
+        }
+
+        ajustePendente = true;
+
+        requestAnimationFrame(() => {
+          ajustePendente = false;
+
+          if (desenhando) {
+            return;
+          }
+
+          ajustarCanvas();
+        });
+      }
+    );
+
+    formulario.addEventListener(
+      "submit",
+      async (evento) => {
+        evento.preventDefault();
+
+        if (!codigo || !treinamentoCarregado) {
+          mostrarMensagem(
+            "Treinamento não identificado. Verifique o link."
+          );
+
+          return;
+        }
+
+        if (!assinaturaConfirmada) {
+          mostrarMensagem(
+            "Clique em 'Assinar em tela cheia' e confirme sua assinatura."
+          );
+
+          return;
+        }
+
+        enviar.disabled = true;
+        enviar.textContent = "Registrando...";
+
+        mostrarMensagem("");
+
+        const dados = {
+          codigo_acesso: codigo,
+
+          nome: document.getElementById(
+            "nome"
+          ).value.trim(),
+
+          matricula: document.getElementById(
+            "matricula"
+          ).value.trim(),
+
+          funcao: document.getElementById(
+            "funcao"
+          ).value.trim(),
+
+          setor: document.getElementById(
+            "setor"
+          ).value.trim(),
+
+          assinatura: assinaturaConfirmada
+        };
+
+        try {
+          const resposta = await fetch(
+            URL_FUNCAO,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+              body: JSON.stringify(dados)
+            }
+          );
+
+          const resultado = await resposta.json();
+
+          if (
+            !resposta.ok ||
+            !resultado.sucesso
+          ) {
+            throw new Error(
+              resultado.erro ||
+              resultado.mensagem ||
+              "Não foi possível registrar a presença."
+            );
+          }
+
+          mostrarMensagem(
+            "Presença registrada com sucesso!",
+            true
+          );
+
+          formulario.reset();
+
+          assinaturaConfirmada = null;
+          assinaturaAnterior = null;
+
+          limparCanvas();
+          mostrarPreview();
+
+          enviar.textContent =
+            "Presença registrada";
+
+          enviar.disabled = true;
+
+        } catch (erro) {
+          mostrarMensagem(
+            erro.message ||
+            "Erro de conexão. Tente novamente."
+          );
+
+          enviar.disabled = false;
+
+          enviar.textContent =
+            "Registrar presença";
+        }
+      }
+    );
 
     mostrarPreview();
+    carregarTreinamento();
   </script>
+
 </body>
 </html>
