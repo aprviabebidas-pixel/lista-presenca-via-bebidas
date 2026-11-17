@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -601,9 +602,10 @@
 
         <p class="muted">
           Consulte participantes, gere o PDF, edite
-          informações ou exclua treinamentos sem
-          presenças registradas. Compartilhe apenas
-          o link de presença com os funcionários.
+          informações ou exclua treinamentos.
+          Ao excluir um treinamento, todos os
+          participantes e suas assinaturas digitais
+          também serão removidos definitivamente.
         </p>
 
         <div class="table-wrap">
@@ -1271,9 +1273,7 @@
             ...periodo
           };
 
-          const {
-            error
-          } = await sb
+          const { error } = await sb
             .from('treinamentos')
             .insert(dados);
 
@@ -1436,58 +1436,65 @@
       }
     );
 
-    // EXCLUIR TREINAMENTO
+    // EXCLUIR TREINAMENTO E TODOS OS DADOS
 
     async function excluirTreinamento(t) {
-      const confirmacao = confirm(
-        `Deseja realmente excluir o treinamento "${t.nome}"?\n\n` +
-        'Esta ação não poderá ser desfeita.\n\n' +
-        'Treinamentos com presenças registradas não podem ser excluídos.'
+      const confirmado = confirm(
+        `ATENÇÃO!\n\n` +
+        `Deseja excluir definitivamente o treinamento "${t.nome}"?\n\n` +
+        `Serão excluídos:\n` +
+        `- O treinamento cadastrado;\n` +
+        `- Todos os participantes;\n` +
+        `- Todas as assinaturas digitais.\n\n` +
+        `ESTA AÇÃO NÃO PODERÁ SER DESFEITA.`
       );
 
-      if (!confirmacao) {
+      if (!confirmado) {
         return;
       }
 
       aviso(
         'treinosMsg',
-        'Verificando participantes do treinamento...'
+        'Excluindo treinamento, participantes e assinaturas...'
       );
 
       try {
-        const { count, error: erroContagem } = await sb
-          .from('presencas')
-          .select('id', {
-            count: 'exact',
-            head: true
-          })
-          .eq('treinamento_id', t.id);
+        const {
+          data: { session },
+          error: erroSessao
+        } = await sb.auth.getSession();
 
-        if (erroContagem) {
-          throw Error(erroContagem.message);
-        }
-
-        if (count > 0) {
+        if (erroSessao || !session) {
           throw Error(
-            `Este treinamento possui ${count} presença(s). ` +
-            'Para excluí-lo, primeiro remova os participantes. ' +
-            'Recomendamos preservar treinamentos que já possuem assinaturas.'
+            'Sua sessão expirou. Faça login novamente.'
           );
         }
 
-        const { data, error } = await sb
-          .from('treinamentos')
-          .delete()
-          .eq('id', t.id)
-          .select('id');
+        const resposta = await fetch(
+          SUPABASE_URL +
+          '/functions/v1/excluir-treinamento',
+          {
+            method: 'POST',
 
-        if (error) {
-          throw Error(error.message);
-        }
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_PUBLIC_KEY,
+              'Authorization':
+                'Bearer ' + session.access_token
+            },
 
-        if (!data?.length) {
+            body: JSON.stringify({
+              treinamento_id: t.id
+            })
+          }
+        );
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok || !resultado.success) {
           throw Error(
-            'Treinamento não excluído. Verifique as permissões.'
+            resultado.error ||
+            'Não foi possível excluir o treinamento.'
           );
         }
 
@@ -1509,13 +1516,16 @@
 
         aviso(
           'treinosMsg',
-          'Treinamento excluído com sucesso.'
+          'Treinamento excluído com sucesso! ' +
+          resultado.participantes_excluidos +
+          ' participante(s) e suas assinaturas removidos.'
         );
 
       } catch (err) {
         aviso(
           'treinosMsg',
-          'Não foi possível excluir: ' + err.message,
+          'Não foi possível concluir a exclusão: ' +
+          err.message,
           true
         );
       }
@@ -1819,7 +1829,7 @@
       }
     );
 
-    // EXCLUIR PARTICIPANTE
+    // EXCLUIR PARTICIPANTE INDIVIDUALMENTE
 
     async function excluirParticipante(p) {
       if (!treinoAtual) {
@@ -2241,12 +2251,6 @@
           'presencasMsg',
           'Preparando PDF e carregando assinaturas...'
         );
-
-        /*
-          Recarrega as presenças para garantir que
-          correções e exclusões recentes sejam
-          refletidas no documento.
-        */
 
         await carregarPresencas();
 
