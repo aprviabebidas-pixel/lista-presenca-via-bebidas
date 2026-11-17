@@ -197,7 +197,7 @@
       });
 
     document.getElementById("formulario")
-      .addEventListener("submit", (evento) => {
+      .addEventListener("submit", async (evento) => {
         evento.preventDefault();
 
         const mensagem =
@@ -209,9 +209,33 @@
           return;
         }
 
-        mensagem.textContent =
-          "Assinatura capturada com sucesso! " +
-          "O envio ao banco será ativado depois.";
+
+mensagem.textContent = "Verificando conexão com o servidor...";
+
+try {
+  const resposta = await fetch(
+    "https://brpjkexhqyrdbwcpauzx.supabase.co/functions/v1/registrar-presenca",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({})
+    }
+  );
+
+  const resultado = await resposta.json();
+
+  mensagem.textContent =
+    resultado.mensagem ||
+    resultado.erro ||
+    "Resposta recebida do servidor";
+
+} catch (erro) {
+  mensagem.textContent =
+    "Não foi possível conectar ao servidor.";
+}
+
       });
   </script>
 </body>
